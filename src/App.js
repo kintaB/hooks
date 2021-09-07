@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect, useRef, useMemo } from "react";
 
-function App() {
+const complexCompute = (num) => {
+  console.log("complex Comp");
+  let i = 0;
+  while (i < 100000000) i++;
+  return num * 2;
+};
+
+const App = () => {
+  const [number, setNumber] = useState(42);
+  const [colored, setColored] = useState(false);
+
+  const styles = useMemo(
+    () => ({
+      color: colored ? "darkred" : "black",
+    }),
+    [colored]
+  );
+
+  const computed = useMemo(() => {
+    return complexCompute(number);
+  }, [number]);
+
+  useEffect(() => {
+    console.log("styles");
+  }, [styles]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>
+        <h1 style={styles}>Ресурс: {computed}</h1>
+        <button onClick={() => setNumber((prev) => prev + 1)}>Добавить</button>
+        <button onClick={() => setNumber((prev) => prev - 1)}>Убрать</button>
+        <button onClick={() => setColored((prev) => !prev)}>
+          Изменить цвет
+        </button>
+      </div>
+      <div></div>
     </div>
   );
-}
+};
 
 export default App;
